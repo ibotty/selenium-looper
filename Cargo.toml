@@ -12,3 +12,5 @@ include_dir = "0.7.3"
 mime = "0.3.17"
 mime_guess = "2.0.4"
 tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
+tracing = "0.1.37"
+tracing-subscriber = "0.3.17"

@@ -2,17 +2,25 @@ use axum::body;
 use axum::extract::Path;
 use axum::response::{IntoResponse, Response};
 use axum::routing::get;
-use include_dir::{include_dir, Dir};
 use http::{header, HeaderValue, StatusCode};
+use include_dir::{include_dir, Dir};
+use tracing::info;
 
 const STATIC_DIR: Dir = include_dir!("./static");
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let subscriber = tracing_subscriber::FmtSubscriber::builder()
+            .with_max_level(tracing::Level::INFO)
+            .finish();
+    tracing::subscriber::set_global_default(subscriber)?;
+
     let app = axum::Router::new()
         .route("/static/*path", get(static_path));
 
-    axum::Server::bind(&"0.0.0.0:8080".parse().unwrap())
+    let address = &"0.0.0.0:8080".parse()?;
+    info!("Server listening on http://{}", address);
+    axum::Server::bind(&address)
         .serve(app.into_make_service())
         .await?;
 
