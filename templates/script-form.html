@@ -1,0 +1,47 @@
+{% let input_type -%}
+{% if new -%}
+  {% let input_type = "text" -%}
+{% else -%}
+  {% let input_type = "hidden" -%}
+{% endif -%}
+
+<li class="script-row" hx-swap="outerHTML swap:100ms" hx-target="this" hx-push-url="false">
+  {% if new %}
+    <label class="uk-form-label" for="script_id{{ input_name_suffix }}">Name</label>
+  {% else %}
+    <span>{{ script_id }}: </span>
+  {% endif %}
+  <input class="uk-input"
+    id="script_id{{ input_name_suffix }}"
+    name="script_id{{ input_name_suffix }}"
+    required="true"
+    type="{{ input_type }}"
+    value="{{ script_id }}"
+  />
+
+  {% if new %}
+    <label class="uk-form-label" for="script_json{{ input_name_suffix }}">Json</label>
+    <textarea class="uk-textarea uk-form-small uk-height-medium"
+      id="script_json{{ input_name_suffix }}"
+      name="script_json{{ input_name_suffix }}"
+      required="true">{{ script_json }}</textarea>
+  {% else %}
+    <span>{{ script_name }}</span>
+    <input
+      id="script_json{{ input_name_suffix }}"
+      name="script_json{{ input_name_suffix }}"
+      required="true"
+      value="{{ script_json }}"
+      type="hidden"
+    />
+  {% endif %}
+
+  {% if new %}
+  <button uk-icon="check"
+    hx-post="/partials/script-form/"
+    hx-include="closest .script-row" ></button>
+  {% else %}
+  <button uk-icon="trash"
+    hx-delete="/partials/script-form/{{ script_name }}" ></button>
+  {% endif %}
+</li>

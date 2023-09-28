@@ -1,0 +1,17 @@
+<div>
+  <input id="result-input" type="hidden" value="{{result_json}}" />
+  <button id="copy-result-button"
+    uk-icon="icon:copy; ratio:2" class="uk-button uk-button-primary uk-button-large"
+    hx-boost="false"
+    href=""
+    _="on click
+        set text to #result-input.value
+        set original to my.innerHTML
+        writeText(text) into the navigator's clipboard
+        put 'Copied' into my.innerHTML
+        wait 1s then put original into my.innerHTML
+    "
+  >
+    Copy to Clipboard
+  </button>
+</div>

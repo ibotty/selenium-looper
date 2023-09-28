@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="htmx-config" content='{}'>
+    <title>Loop Selenium script</title>
+    <link rel="stylesheet" href="/assets/site.css">
+    <link rel="stylesheet" href="/assets/uikit.min.css">
+    <script src="/assets/htmx.min.js"></script>
+    <script src="/assets/hyperscript.min.js"></script>
+    <script src="/assets/uikit.min.js"></script>
+    <script src="/assets/uikit-icons.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body _="on every htmx:beforeSend in <button:not(.no-disable)/> tell it
+    toggle @disabled until htmx:afterOnLoad"
+    hx-push-url="true">
+    <div class="uk-container">
+      <h1 class="uk-heading-medium">Loop a Selenium script</h1>
+      <div class="uk-section uk-section-default">
+        <form id="loop" method="post"  hx-post="/loop" hx-swap="outerHTML">
+          <fieldset class="uk-fieldset">
+            <legend class="uk-legend">Scripts</legend>
+            <ul class="uk-list uk-list-disc">
+              <li>
+                <a href=""
+                  id="add-script-row"
+                  uk-icon="plus"
+                  hx-push-url="false"
+                  hx-get="/partials/script-form/loop-script"
+                  hx-swap="beforebegin settle:100ms"
+                  hx-target="closest li" ></a>
+              </li>
+            </ul>
+          </fieldset>
+          <fieldset class="uk-fieldset">
+            <legend class="uk-legend">Data</legend>
+            <label class="uk-form-label" for="data">Postico JSON output</label>
+            <textarea class="uk-textarea uk-form-small uk-height-medium" id="data" name="data"></textarea>
+          </fieldset>
+          <button type="submit">Generate</button>
+        </form>
+      </div>
+
+      <div class="uk-section uk-section-muted"
+        <h2><span uk-icon="question"></span> Usage</h2>
+        <h3>Script format</h3>
+        <p>Given input data like</p>
+        <pre>
+          <code>
+            [
+              { "an_id": 1 },
+              { "an_id": 2 }
+            ]
+          </code>
+        </pre>
+        <p>use <code>${an_id}</code> for variables in the script.</p>
+      </div>
+    </div>
+  </body>
+</html>

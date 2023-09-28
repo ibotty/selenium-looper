@@ -1,0 +1,15 @@
+form#loop li.htmx-swapping {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+form#loop li.htmx-added {
+  opacity: 0;
+}
+form#loop li {
+  opacity: 1;
+  transition: opacity 100ms ease-out;
+}
+
+#copy-result-button {
+  transition: width 100ms ease-in-out;
+}
