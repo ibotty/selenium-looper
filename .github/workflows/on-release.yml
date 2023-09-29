@@ -38,6 +38,7 @@ jobs:
 
     - name: Create tarball
       run: |
+        set -x
         outdir="./target"
         staging="$(basename ${{ github.repository }})-$GITHUB_REF_NAME"
         staging_archive="$staging.tar.gz"
@@ -47,7 +48,7 @@ jobs:
         cp README.md LICENSE "$staging"
         cp "$outdir"/release/looper "$staging"
         tar czf "$staging_archive" "$staging"
-        shasum -a 256 "$staging_archive" "$staging_archive_sum"
+        sha256sum "$staging_archive" > "$staging_archive_sum"
 
         echo "ASSET=$staging_archive" >> $GITHUB_ENV
         echo "ASSET_SUM=$staging_archive_sum" >> $GITHUB_ENV
