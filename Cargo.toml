@@ -21,7 +21,7 @@ serde = { version = "1.0.188", features = ["derive"] }
 serde_derive = "1.0.188"
 serde_json = "1.0.107"
 thiserror = "1.0.48"
-tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread", "tracing"] }
+tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread", "tracing", "signal"] }
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter", "std", "registry", "fmt"] }
 

@@ -16,6 +16,7 @@ use axum_htmx::HxBoosted;
 use http::{header, HeaderValue, StatusCode};
 use include_dir::{include_dir, Dir};
 use serde_derive::{Deserialize, Serialize};
+use tokio::signal::unix::{signal, SignalKind};
 use tracing::{debug, info, instrument};
 use tracing_subscriber::{fmt, prelude::*, EnvFilter};
 
@@ -44,6 +45,7 @@ async fn main() -> anyhow::Result<()> {
     info!("Server listening on http://{}", address);
     axum::Server::bind(address)
         .serve(app.into_make_service())
+        .with_graceful_shutdown(shutdown_signal())
         .await?;
 
     Ok(())
@@ -174,4 +176,25 @@ async fn serve_asset(Path(path): Path<String>) -> impl IntoResponse {
                 .body(body::boxed(body::Empty::new()))
                 .unwrap(),
         )
+}
+
+#[instrument]
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        tokio::signal::ctrl_c()
+            .await
+            .expect("failed to install Ctrl+C handler");
+    };
+    let terminate = async {
+        signal(SignalKind::terminate())
+            .expect("failed to install signal handler")
+            .recv()
+            .await;
+    };
+
+    tokio::select! {
+        _ = ctrl_c => {},
+        _ = terminate => {},
+    }
+    tracing::info!("signal received, starting graceful shutdown");
 }
