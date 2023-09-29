@@ -40,7 +40,7 @@ jobs:
         with:
           profile: minimal
           toolchain: stable
-          component: rustfmt
+          components: rustfmt
           override: true
       - uses: actions-rs/cargo@v1
         with:
