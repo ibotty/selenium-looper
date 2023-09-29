@@ -12,7 +12,7 @@ jobs:
     - name: Create GitHub release
       run: gh release create $GITHUB_REF_NAME
       env:
-        GH_TOKEN: ${{ GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-release:
     name: Cargo build
@@ -50,4 +50,4 @@ jobs:
     - name: Upload to GitHub release
       run: gh release upload $GITHUB_REF_NAME ${{ env.ASSET }} ${{ env.ASSET_SUM }}
       env:
-        GH_TOKEN: ${{ GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
