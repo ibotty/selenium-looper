@@ -40,8 +40,8 @@ jobs:
         staging_archive_sum="$staging_archive.sha256"
         mkdir -p "$staging"
 
-        cp README.md "$staging"
-        cp "$outdir"/*/release/* "$staging"
+        cp README.md LICENSE "$staging"
+        cp "$outdir"/release/looper "$staging"
         tar czf "$staging_archive" "$staging"
         shasum -a 256 "$staging_archive" "$staging_archive_sum"
 
