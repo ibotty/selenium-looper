@@ -82,7 +82,7 @@ pub fn generate_loop_script(
 
 pub fn export_row_variable(ident: &str) -> Command {
     let scriptlet = format!("return ${{row}}['{}'];", ident);
-    cmd("ExecuteScript_Sandbox", &scriptlet, ident)
+    cmd("ExecuteScript", &scriptlet, ident)
 }
 
 pub fn declare_array(data: Vec<Map<String, Value>>, ident: &str) -> Result<Command, AppError> {
@@ -91,7 +91,7 @@ pub fn declare_array(data: Vec<Map<String, Value>>, ident: &str) -> Result<Comma
         serde_json::to_string(&data).context("Could not serialize data")?,
     );
 
-    Ok(cmd("ExecuteScript_Sandbox", &scriptlet, ident))
+    Ok(cmd("ExecuteScript", &scriptlet, ident))
 }
 
 pub fn foreach(target: &str, value: &str) -> Command {
