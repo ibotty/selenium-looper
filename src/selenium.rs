@@ -57,7 +57,6 @@ pub fn generate_loop_script(
     // this is safe because of the assertion above.
     let first_element = data.pop().unwrap();
     data.push(first_element.clone());
-    let input_keys = first_element.keys();
 
     let name = format!("looped {}", script.name);
     let creation_date = Utc::now().format("%Y-%d-%m").to_string();
@@ -66,10 +65,14 @@ pub fn generate_loop_script(
     let mut commands = vec![
         declare_array(data, data_ident)?,
         foreach(data_ident, row_ident),
-        echo(&format!("processing row ${{{}}}", row_ident)),
         console_log(&format!("processing row ${{{}}}", row_ident)),
     ];
-    commands.extend(input_keys.map(|k| export_row_variable(k)));
+    commands.extend(first_element.keys().map(|k| export_row_variable(k)));
+    commands.extend(
+        first_element
+            .keys()
+            .map(|k| echo(&format!("processing row.{} ${{{}}}", k, k))),
+    );
     commands.append(&mut script.commands);
     commands.push(end());
 
@@ -87,7 +90,7 @@ pub fn export_row_variable(ident: &str) -> Command {
 
 pub fn declare_array(data: Vec<Map<String, Value>>, ident: &str) -> Result<Command, AppError> {
     let scriptlet = format!(
-        "return JSON.parse(String.raw`{}`);",
+        "return {};",
         serde_json::to_string(&data).context("Could not serialize data")?,
     );
 
